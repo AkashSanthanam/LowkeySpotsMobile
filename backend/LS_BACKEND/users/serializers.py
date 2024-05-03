@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import User
+from .models import LowkeyUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = LowkeyUser
         fields = ['id', 'username', 'email', 'password', 'map_count', 'friend_count']
         extra_kwargs = {
             'password': {'write_only': True},
@@ -13,7 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
         }
             
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        return LowkeyUser.objects.create_user(**validated_data)
+    
     
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
@@ -23,3 +24,5 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+    
