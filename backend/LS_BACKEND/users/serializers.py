@@ -11,7 +11,15 @@ class UserSerializer(serializers.ModelSerializer):
             'friend_count': {'read_only': True},
             'id': {'read_only': True},
         }
-    
+            
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
     
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        password = validated_data.get('password')
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
